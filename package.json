@@ -1,0 +1,31 @@
+{
+  "name": "Mercor",
+  "version": "1.0.0",
+  "description": "Zoom_Bot",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/index.js",
+    "server": "nodemon index.js",
+    "client": "npm start --prefix ./client"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/prisam1/Mercor.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/prisam1/Mercor/issues"
+  },
+  "dependencies": {
+    "@google-cloud/speech": "^5.5.0",
+    "@google-cloud/text-to-speech": "^4.2.2",
+    "axios": "^1.4.0",
+    "dotenv": "^16.3.0",
+    "express": "^4.18.2",
+    "nodemon": "^2.0.22",
+    "openai": "^3.3.0",
+    "zoomus": "^0.1.4"
+  }
+}
