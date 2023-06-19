@@ -1,10 +1,9 @@
         const  ZoomSDK  = require('zoomus')
         const { SpeechClient } = require('@google-cloud/speech')
-        const { OpenAIApi } = require("openai");
+        const { OpenAIApi } = require("openai")
         const textToSpeech = require('@google-cloud/text-to-speech')
         const secret = require('../client_secret_18577759840-hrc66r6ekio00lfhsuhc269t4clamak6.apps.googleusercontent.com.json')
-        const axios = require('axios')
-
+       
         const zoom = new ZoomSDK({
           key: '35W9PdURsqLE2t4eyxwtA',
           secret: '5KeSWSuHR2ZLYHlZOWWQfzXw6rbu76k6'
@@ -14,6 +13,10 @@
           projectId: 'infinite-loader-379113',
           keyFilename: secret
         });
+        const credentials = {
+          projectId: 'infinite-loader-379113',
+          keyFilename: secret,
+        };
         
         
         function extractMeetingIdFromLink(link) {
@@ -63,7 +66,7 @@ const convertSpeechToText = async (req, res) => {
         console.log('Transcript:', transcript);
         const response = await gpt.complete({
           prompt: transcript,
-          maxTokens: 50
+          maxTokens: 3000
         });
         const audioContent = await convertTextToSpeech(response.choices[0].text)
 
@@ -93,15 +96,17 @@ const convertSpeechToText = async (req, res) => {
   }
 }
 
-async function convertTextToSpeech(text) {
-  const [response] = await textToSpeechClient.synthesizeSpeech({
-    input: { text },
-    voice: { languageCode: 'en-US', ssmlGender: 'NEUTRAL' },
-    audioConfig: { audioEncoding: 'MP3' }
-  });
+  const client = new textToSpeech.TextToSpeechClient({ credentials })
 
-  const audioContent = response.audioContent.toString('base64')
-  return audioContent
+  async function convertTextToSpeech(text, languageCode = 'en-US', voiceName = 'en-US-Standard-D', speakingRate = 1.0) {
+    const request = {
+      input: { text },
+      voice: { languageCode, name: voiceName },
+      audioConfig: { audioEncoding: 'MP3', speakingRate },
+    };
+  
+    const [response] = await client.synthesizeSpeech(request)
+    return response.audioContent
 }
       
           
